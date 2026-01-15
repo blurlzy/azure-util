@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AzureUtil.API/AzureUtil.API.csproj" />
+  <Project Path="AzureUtil.Tests/AzureUtil.Tests.csproj" Id="3f1e1f5c-4bc3-422a-aac2-62d64adb7662" />
+</Solution>
