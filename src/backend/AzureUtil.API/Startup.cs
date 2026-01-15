@@ -26,10 +26,33 @@ namespace AzureUtil.API
                     //c.BaseAddress = new Uri("https://management.azure.com/");
                     c.DefaultRequestHeaders.Add("Accept", "application/json");
                     // You can add a custom User-Agent if you want
+               })
+               .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+               {
+                    PooledConnectionLifetime = TimeSpan.FromMinutes(2), // Prevents DNS issues
+                    PooledConnectionIdleTimeout = TimeSpan.FromMinutes(1),
+                    //MaxConnectionsPerServer = 10
                });
 
                // 
                services.AddSingleton<AzureRestClient>();
+          }
+
+
+          public static void ConfigureCors(this IServiceCollection services, string corsPolicy)
+          {
+               string[] allowedOrigins = new[]
+               {
+                                "http://localhost:4200"
+                        };
+
+               // cors policy
+               services.AddCors(
+                       opt =>
+                       {
+                            opt.AddPolicy(corsPolicy,
+                     builder => builder.WithOrigins(allowedOrigins).AllowAnyHeader().AllowAnyMethod());
+                       });
           }
 
           public static void ConfigureSwagger(this IServiceCollection services)

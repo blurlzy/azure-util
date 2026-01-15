@@ -8,13 +8,13 @@ namespace AzureUtil.API.Services
      {
           private static readonly string[] Scopes = ["https://management.azure.com/.default"];
           private readonly AzureOptions _opts;
-          private readonly IHttpClientFactory _httpClientFactory;
+          private readonly HttpClient _httpClient;
 
           // ctor
-          public AzureRestClient(IOptions<AzureOptions> opts, IHttpClientFactory httpClientFactory)
+          public AzureRestClient(IOptions<AzureOptions> opts, HttpClient httpClient)
           {
                _opts = opts.Value;
-               _httpClientFactory = httpClientFactory;
+               _httpClient = httpClient;
           }
 
           public async Task<IReadOnlyList<Location>> ListLocationsAsync(CancellationToken ct = default)
@@ -23,14 +23,17 @@ namespace AzureUtil.API.Services
                var credential = new ClientSecretCredential(_opts.TenantId, _opts.ClientId, _opts.ClientSecret);
                AccessToken token = await credential.GetTokenAsync(new TokenRequestContext(Scopes), ct);
 
-               // create HTTP client with auth header
-               var http = _httpClientFactory.CreateClient(ApiEndpoints.HttpClientName);
-               http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
-
                // API endpoint
                var url = string.Format(ApiEndpoints.ListRegions, _opts.SubscriptionId);
-               using var resp = await http.GetAsync(url, ct);
+
+               // Set auth header (don't use DefaultRequestHeaders - not thread-safe)
+               using var request = new HttpRequestMessage(HttpMethod.Get, url);
+               request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+
+               // Send request
+               using var resp = await _httpClient.SendAsync(request, ct);
                var body = await resp.Content.ReadAsStringAsync(ct);
+
 
                if (!resp.IsSuccessStatusCode)
                {

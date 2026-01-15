@@ -23,7 +23,10 @@ builder.Services.ConfigureServices(builder.Configuration);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // builder.Services.AddOpenApi();
+// swaggger
 builder.Services.ConfigureSwagger();
+// cors policy
+builder.Services.ConfigureCors("AllowCors");
 
 var app = builder.Build();
 
@@ -44,6 +47,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// configure cors
+app.UseCors("AllowCors");
 
 app.UseAuthorization();
 
