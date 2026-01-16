@@ -5,3 +5,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using AzureUtil.API;
 global using AzureUtil.API.Models;
 global using AzureUtil.API.Config;
+global using AzureUtil.API.Services;

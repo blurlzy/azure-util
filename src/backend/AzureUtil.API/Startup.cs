@@ -34,12 +34,13 @@ namespace AzureUtil.API
                     //MaxConnectionsPerServer = 10
                });
 
-            // in memeory cache
-            services.AddMemoryCache();
-            // register services           
-            services.AddSingleton<AzureRestClient>();
-            services.AddScoped<ILocationService, LocationService>();
-        }
+               // in memeory cache
+               services.AddMemoryCache();
+               // register services           
+               services.AddSingleton<AzureRestClient>();
+               services.AddScoped<ILocationService, LocationService>();
+               services.AddScoped<IAIModelService, AIModelService>();
+          }
 
 
           public static void ConfigureCors(this IServiceCollection services, string corsPolicy)
