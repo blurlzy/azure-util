@@ -1,11 +1,18 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { TestSnackbarComponent } from '../test-snackbar.component';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, TestSnackbarComponent],
   template: `
 <div class="container py-4">
+
+  <!-- Test Snackbar Component for debugging -->
+  <div class="alert alert-info mb-3">
+    <strong>Debug Panel:</strong> Test snackbar styling
+    <app-test-snackbar></app-test-snackbar>
+  </div>
 
   <!-- Header -->
   <header class="mb-4">

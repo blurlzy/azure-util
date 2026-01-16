@@ -2,18 +2,35 @@ import { Component, inject, signal, Signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { form, FormField } from '@angular/forms/signals'
-
+// angular material
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 // data services
 import { ModelExplorerDataService } from './model-explorer.data.service';
 @Component({
   selector: 'app-model-explorer',
-  imports: [CommonModule, FormsModule, FormField],
+  imports: [CommonModule, FormsModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatProgressBarModule],
   template: `
   <!-- Controls -->
+   <mat-progress-bar mode="indeterminate" class="mb-2"></mat-progress-bar>
+   
   <div class="card mb-3">
-    <div class="card-body">
+    
+    <div class="card-body mt-2">
+      
       <div class="row g-3">
         <div class="col-md-5">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Region</mat-label>
+            <mat-select>
+              @for (location of locations(); track location) {
+                <mat-option [value]="location.name">{{location.displayName}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+<!-- 
           <label class="form-label text-muted">Region</label>
           <select class="form-select" [formField]="selectionForm.location">
             @if(locations().length === 0 ){
@@ -26,7 +43,7 @@ import { ModelExplorerDataService } from './model-explorer.data.service';
                 <option [value]="location.name">{{ location.displayName }}</option>
             }
                    
-          </select>
+          </select> -->
 
         </div>
 

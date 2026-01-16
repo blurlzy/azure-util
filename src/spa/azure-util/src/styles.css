@@ -1,1 +1,174 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Snackbar Styles - Fixed for Angular Material with proper targeting */
+
+/* Success Snackbar */
+.snackbar-success {
+  --mdc-snackbar-container-color: #4caf50 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+}
+
+.snackbar-success .mdc-snackbar__surface {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+}
+
+.snackbar-success .mat-mdc-snack-bar-label {
+  color: #fff !important;
+}
+
+.snackbar-success .mat-mdc-button {
+  color: #fff !important;
+}
+
+/* Error Snackbar */
+.snackbar-error {
+  --mdc-snackbar-container-color: #f44336 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+}
+
+.snackbar-error .mdc-snackbar__surface {
+  background-color: #f44336 !important;
+  color: #fff !important;
+}
+
+.snackbar-error .mat-mdc-snack-bar-label {
+  color: #fff !important;
+}
+
+.snackbar-error .mat-mdc-button {
+  color: #fff !important;
+}
+
+/* Warning Snackbar */
+.snackbar-warning {
+  --mdc-snackbar-container-color: #ff9800 !important;
+  --mdc-snackbar-supporting-text-color: #000 !important;
+  --mat-snack-bar-button-color: #000 !important;
+}
+
+.snackbar-warning .mdc-snackbar__surface {
+  background-color: #ff9800 !important;
+  color: #000 !important;
+}
+
+.snackbar-warning .mat-mdc-snack-bar-label {
+  color: #000 !important;
+}
+
+.snackbar-warning .mat-mdc-button {
+  color: #000 !important;
+}
+
+/* Info Snackbar */
+/* .snackbar-info {
+  --mdc-snackbar-container-color: #2196f3 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+}
+
+.snackbar-info .mdc-snackbar__surface {
+  background-color: #2196f3 !important;
+  color: #fff !important;
+}
+
+.snackbar-info .mat-mdc-snack-bar-label {
+  color: #fff !important;
+}
+
+.snackbar-info .mat-mdc-button {
+  color: #fff !important;
+} */
+
+/* Loading Snackbar */
+/* .snackbar-loading {
+  --mdc-snackbar-container-color: #607d8b !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #fff !important;
+}
+
+.snackbar-loading .mdc-snackbar__surface {
+  background-color: #607d8b !important;
+  color: #fff !important;
+}
+
+.snackbar-loading .mat-mdc-snack-bar-label {
+  color: #fff !important;
+}
+
+.snackbar-loading .mat-mdc-button {
+  color: #fff !important;
+} */
+
+/* Persistent Snackbar */
+/* .snackbar-persistent {
+  --mdc-snackbar-container-color: #424242 !important;
+  --mdc-snackbar-supporting-text-color: #fff !important;
+  --mat-snack-bar-button-color: #ff9800 !important;
+}
+
+.snackbar-persistent .mdc-snackbar__surface {
+  background-color: #424242 !important;
+  color: #fff !important;
+}
+
+.snackbar-persistent .mat-mdc-snack-bar-label {
+  color: #fff !important;
+}
+
+.snackbar-persistent .mat-mdc-button {
+  color: #ff9800 !important;
+} */
+
+/* General snackbar enhancements */
+/* .mdc-snackbar__surface {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mat-mdc-snack-bar-label {
+  font-weight: 500 !important;
+}
+
+.mat-mdc-snack-bar-action {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+} */
+
+/* Alternative approach - direct overlay targeting */
+/* .cdk-overlay-pane.snackbar-success .mat-mdc-snack-bar-container {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+}
+
+.cdk-overlay-pane.snackbar-error .mat-mdc-snack-bar-container {
+  background-color: #f44336 !important;
+  color: #fff !important;
+}
+
+.cdk-overlay-pane.snackbar-warning .mat-mdc-snack-bar-container {
+  background-color: #ff9800 !important;
+  color: #000 !important;
+}
+
+.cdk-overlay-pane.snackbar-info .mat-mdc-snack-bar-container {
+  background-color: #2196f3 !important;
+  color: #fff !important;
+}
+
+.cdk-overlay-pane.snackbar-loading .mat-mdc-snack-bar-container {
+  background-color: #607d8b !important;
+  color: #fff !important;
+}
+
+.cdk-overlay-pane.snackbar-persistent .mat-mdc-snack-bar-container {
+  background-color: #424242 !important;
+  color: #fff !important;
+} */
+
+/* full width */
+.full-width {
+  width: 100%;
+}

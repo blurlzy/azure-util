@@ -30,6 +30,7 @@
               }
             ],
             "styles": [
+              "src/material-theme.scss",
               "src/assets/styles/bootstrap.min.css",
               "src/styles.css"
             ]
