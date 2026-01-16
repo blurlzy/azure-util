@@ -26,37 +26,62 @@ import { ModelTable } from './model-table';
       }
     
     <div class="row g-3">
-        <div class="col-md-6">
-          <mat-form-field  class="full-width" >
-            <mat-label>Region</mat-label>
-            <mat-select [formField]="selectionForm.location">
-              @for (location of locations(); track location) {
-                <mat-option [value]="location.name">{{location.displayName}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
+       <div class="col-md-10 pe-4">
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field  class="full-width" >
+              <mat-label>Region</mat-label>
+              <mat-select [formField]="selectionForm.location">
+                @for (location of locations(); track location) {
+                  <mat-option [value]="location.name">{{location.displayName}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-        <div class="col-md-6">
-          <mat-form-field  class="full-width">
-            <mat-label>Model Kind</mat-label>
-            <mat-select [formField]="selectionForm.modelFormat">
-              @if(modelFormats().length === 0 && selectionModel().location !== '') {
-                <mat-option disabled value="">No model kinds available in this region</mat-option>
-              }
+          <div class="col-md-6">
+            <mat-form-field  class="full-width">
+              <mat-label>Model Kind</mat-label>
+              <mat-select [formField]="selectionForm.modelFormat">
+                @if(modelFormats().length === 0 && selectionModel().location !== '') {
+                  <mat-option disabled value="">No model kinds available in this region</mat-option>
+                }
 
-              @for (modelFormat of modelFormats(); track modelFormat) {
-                <mat-option [value]="modelFormat">{{modelFormat}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
+                @for (modelFormat of modelFormats(); track modelFormat) {
+                  <mat-option [value]="modelFormat">{{modelFormat}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <app-model-table [data]="models()"></app-model-table> 
+       </div>
+
+       </div> 
+
+       <div class="col-md-2 right-nav pt-2 pt-lg-1">
+          <h5 class="mb-3">🔗 Links</h5>
+          <nav class="nav flex-column small">
+            <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/openai/quotas-limits?view=foundry-classic&tabs=REST" target="_blank">Quotas and Limits</a>                                     
+            <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure?view=foundry-classic&tabs=global-standard-aoai%2Cglobal-standard&pivots=azure-openai" target="_blank">Foundry Models sold directly by Azure</a>
+            <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/openai/data-privacy?view=foundry-classic&tabs=azure-portal" target="_blank">Data, privacy, and security for Azure Direct Models in Microsoft Foundry</a>
+            <a class="nav-link" href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/aoai/" target="_blank">Azure AI Foundry Models pricing</a>
+          </nav>
+       </div> 
+
     </div>
 
-    <app-model-table [data]="models()"></app-model-table> 
+
   </div>
   `,
-  styles: ``,
+  styles: `
+    .right-nav {
+       border-left: 1px solid #e5e5e5;
+    }
+
+    .right-nav .nav-link { color: #111; padding-left: 2; text-decoration: underline; }
+    .right-nav .nav-link:hover { text-decoration: none; }
+  `,
 })
 export class ModelExplorer {
   // services
@@ -108,17 +133,18 @@ export class ModelExplorer {
   private loadLocations(): void {
     this.dataService.getLocations().subscribe((data) => {
       this.locations.set(data);
-      this.models.set([]);
     });
   }
 
   private loadModelFormats(location: string): void {
-    this.dataService.getModelFormats(location).subscribe((data) => {
-      this.modelFormats.set(data);
-      // reset selected model format
+          // reset selected model format
        this.selectionModel.update(current => ({ ...current, modelFormat: '' }));
        this.previousModelFormat = '';
        this.models.set([]);
+       
+    this.dataService.getModelFormats(location).subscribe((data) => {
+      this.modelFormats.set(data);
+
     });
   }
 

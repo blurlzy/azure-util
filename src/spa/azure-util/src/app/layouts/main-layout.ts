@@ -15,7 +15,7 @@ import { RouterOutlet, RouterLink, Router } from '@angular/router';
 
   <!-- Header -->
   <header class="mb-4">
-    <h1 class="h4 mb-1">Azure AI Region → Model Explorer</h1>
+    <h1 class="h4 mb-1"> <img src="./assets/images/azure-logo.png" alt="Azure Logo" class="logo"> Azure AI Region → Model Explorer</h1>
     <div class="text-muted small">
       Select an Azure region and explore available AI models, deployment types, quotas, and pricing.
     </div>
@@ -34,7 +34,12 @@ import { RouterOutlet, RouterLink, Router } from '@angular/router';
 
 </div>
   `,
-  styles: ``,
+  styles: `
+    .logo {
+       width: 35px;
+       height: 35px;
+    }
+  `,
 })
 export class MainLayout {
 
