@@ -47,8 +47,9 @@ namespace AzureUtil.API
           {
                string[] allowedOrigins = new[]
                {
-                                "http://localhost:4200"
-                        };
+                    "http://localhost:4200",
+                    "https://polite-wave-072b12400.4.azurestaticapps.net"
+               };
 
                // cors policy
                services.AddCors(
