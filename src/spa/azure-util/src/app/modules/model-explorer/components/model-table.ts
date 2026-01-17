@@ -13,7 +13,7 @@ import { ModelSkuInformation } from './model-sku-information';
   selector: 'app-model-table',
   imports: [DecimalPipe, MatIconModule, MatButtonModule, MatDialogModule, MatTooltipModule],
   template: `
-      <table class="table">
+      <table class="table mt-3">
         <thead>
           <tr>
             <th scope="col" class="align-middle">Model</th>

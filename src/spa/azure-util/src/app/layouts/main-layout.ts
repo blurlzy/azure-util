@@ -7,12 +7,6 @@ import { RouterOutlet, RouterLink, Router } from '@angular/router';
   template: `
 <div class="container py-4">
 
-  <!-- Test Snackbar Component for debugging -->
-  <!-- <div class="alert alert-info mb-3">
-    <strong>Debug Panel:</strong> Test snackbar styling
-    <app-test-snackbar></app-test-snackbar>
-  </div> -->
-
   <!-- Header -->
   <header class="mb-4">
     <h1 class="h4 mb-1"> <img src="./assets/images/azure-logo.png" alt="Azure Logo" class="logo"> Azure AI Region → Model Explorer</h1>
@@ -22,14 +16,19 @@ import { RouterOutlet, RouterLink, Router } from '@angular/router';
   </header>
 
   <div class="row">
-      <div class="col-12"> <router-outlet></router-outlet> </div>
+      <div class="col-12"> 
+        <router-outlet></router-outlet> 
+      </div>
   </div>  
   
 
-
-
-  <footer class="mt-4 text-muted small text-center">
-    Built with love <i class="bi bi-heart-fill text-danger"></i>
+  <footer class="mt-2 text-muted small text-center">
+    <div>
+      built with love <i class="bi bi-heart-fill text-danger"></i> | 
+      <a href="https://github.com/blurlzy/azure-util" target="_blank" class="text-decoration-none text-dark">
+        <i class="bi bi-github"></i> view on GitHub
+      </a>
+    </div>
   </footer>
 
 </div>

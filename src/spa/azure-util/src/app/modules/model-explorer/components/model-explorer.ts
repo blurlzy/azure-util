@@ -27,35 +27,35 @@ import { ModelTable } from './model-table';
     
     <div class="row g-3">
        <div class="col-md-10 pe-4">
-        <div class="row">
-          <div class="col-md-6">
-            <mat-form-field  class="full-width" >
-              <mat-label>Region</mat-label>
-              <mat-select [formControl]="selectedLocation">
-                @for (location of locations(); track location) {
-                  <mat-option [value]="location.name">{{location.displayName}} - {{location.metadata?.physicalLocation}}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field  class="full-width" appearance="outline">
+                <mat-label>Azure Region</mat-label>
+                <mat-select [formControl]="selectedLocation">
+                  @for (location of locations(); track location) {
+                    <mat-option [value]="location.name">{{location.displayName}} - {{location.metadata?.physicalLocation}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+              <mat-form-field  class="full-width" appearance="outline">
+                <mat-label>Model Kind</mat-label>
+                <mat-select [formControl]="selectedModelFormat">
+                  @if(modelFormats().length === 0 && selectedLocation.value !== '') {
+                    <mat-option disabled value="">No model kinds available in this region</mat-option>
+                  }
+
+                  @for (modelFormat of modelFormats(); track modelFormat) {
+                    <mat-option [value]="modelFormat">{{modelFormat}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <app-model-table [data]="models()"></app-model-table> 
           </div>
-
-          <div class="col-md-6">
-            <mat-form-field  class="full-width">
-              <mat-label>Model Kind</mat-label>
-              <mat-select [formControl]="selectedModelFormat">
-                @if(modelFormats().length === 0 && selectedLocation.value !== '') {
-                  <mat-option disabled value="">No model kinds available in this region</mat-option>
-                }
-
-                @for (modelFormat of modelFormats(); track modelFormat) {
-                  <mat-option [value]="modelFormat">{{modelFormat}}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <app-model-table [data]="models()"></app-model-table> 
-       </div>
 
        </div> 
 
