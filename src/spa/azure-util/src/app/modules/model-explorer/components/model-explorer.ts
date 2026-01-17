@@ -1,22 +1,22 @@
-import { Component, inject, signal, Signal, effect, untracked } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { form, FormField } from '@angular/forms/signals'
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 // angular material
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 // data services
-import { ModelExplorerDataService } from './model-explorer.data.service';
+import { ModelExplorerDataService } from '../model-explorer.data.service';
 // loader
-import { Loader } from '../../core/services/loader.service';
+import { Loader } from '../../../core/services/loader.service';
 // components
 import { ModelTable } from './model-table';
 
 @Component({
   selector: 'app-model-explorer',
-  imports: [CommonModule, FormsModule, FormField, MatInputModule, MatSelectModule, MatFormFieldModule, MatProgressBarModule, ModelTable],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, 
+          MatInputModule, MatSelectModule, MatFormFieldModule, MatProgressBarModule, ModelTable],
   template: `
   <!-- Controls -->   
   <div class="mb-3">  
@@ -31,9 +31,9 @@ import { ModelTable } from './model-table';
           <div class="col-md-6">
             <mat-form-field  class="full-width" >
               <mat-label>Region</mat-label>
-              <mat-select [formField]="selectionForm.location">
+              <mat-select [formControl]="selectedLocation">
                 @for (location of locations(); track location) {
-                  <mat-option [value]="location.name">{{location.displayName}}</mat-option>
+                  <mat-option [value]="location.name">{{location.displayName}} - {{location.metadata?.physicalLocation}}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -42,8 +42,8 @@ import { ModelTable } from './model-table';
           <div class="col-md-6">
             <mat-form-field  class="full-width">
               <mat-label>Model Kind</mat-label>
-              <mat-select [formField]="selectionForm.modelFormat">
-                @if(modelFormats().length === 0 && selectionModel().location !== '') {
+              <mat-select [formControl]="selectedModelFormat">
+                @if(modelFormats().length === 0 && selectedLocation.value !== '') {
                   <mat-option disabled value="">No model kinds available in this region</mat-option>
                 }
 
@@ -65,6 +65,7 @@ import { ModelTable } from './model-table';
             <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/openai/quotas-limits?view=foundry-classic&tabs=REST" target="_blank">Quotas and Limits</a>                                     
             <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/models-sold-directly-by-azure?view=foundry-classic&tabs=global-standard-aoai%2Cglobal-standard&pivots=azure-openai" target="_blank">Foundry Models sold directly by Azure</a>
             <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/responsible-ai/openai/data-privacy?view=foundry-classic&tabs=azure-portal" target="_blank">Data, privacy, and security for Azure Direct Models in Microsoft Foundry</a>
+            <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/deployment-types?view=foundry-classic" target="_blank">Deployment types for Microsoft Foundry Models</a>
             <a class="nav-link" href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/aoai/" target="_blank">Azure AI Foundry Models pricing</a>
           </nav>
        </div> 
@@ -88,42 +89,40 @@ export class ModelExplorer {
   private readonly dataService = inject(ModelExplorerDataService);
   public readonly loader = inject(Loader);
 
-  // locations
+  // azure regions / locations
   locations = signal<any[]>([]);
+  // azure AI model formats / kinds
   modelFormats = signal<any[]>([]);
+  // models in selected location and format
   models = signal<any[]>([]);
 
-  selectionModel = signal({
-    location: '',
-    modelFormat: ''
-  });
-
-  selectionForm = form(this.selectionModel)
-  // prev location
-  private previousLocation = '';
-  private previousModelFormat = '';
+  selectedLocation = new FormControl('');
+  selectedModelFormat = new FormControl('');
 
   // ctor
   constructor() {
-    // Separate effect for location changes
-    effect(() => {
-      const location = this.selectionModel().location;
-      const modelFormat = this.selectionModel().modelFormat;
-      //console.log('Location effect - current value:', location, 'prev value:', this.previousLocation);
+    // location changes
+    this.selectedLocation.valueChanges.subscribe((location) => {
+      // reset the model formats
+      this.modelFormats.set([]);
+      this.selectedModelFormat.setValue('');
 
-      // load model formats for the selected location
-      if (location !== this.previousLocation) {
+      // reload model formats for the selected location
+      if(location) {
         this.loadModelFormats(location);
-        this.previousLocation = location;
-        return;
-      }
-
-      // load models for the selected location and model format
-      if(modelFormat !== '' && modelFormat !== this.previousModelFormat) {
-        this.loadModels(location, modelFormat);
-        this.previousModelFormat = modelFormat;
-      }
+      }      
     });
+
+    // model format changes
+    this.selectedModelFormat.valueChanges.subscribe((modelFormat) => {
+      // reste the models
+      this.models.set([]);  
+      if(this.selectedLocation.value && modelFormat) {
+          // reload models
+          this.loadModels(this.selectedLocation.value, modelFormat);
+        }
+    });
+
   }
 
   ngOnInit(): void {
@@ -137,14 +136,8 @@ export class ModelExplorer {
   }
 
   private loadModelFormats(location: string): void {
-          // reset selected model format
-       this.selectionModel.update(current => ({ ...current, modelFormat: '' }));
-       this.previousModelFormat = '';
-       this.models.set([]);
-       
     this.dataService.getModelFormats(location).subscribe((data) => {
       this.modelFormats.set(data);
-
     });
   }
 

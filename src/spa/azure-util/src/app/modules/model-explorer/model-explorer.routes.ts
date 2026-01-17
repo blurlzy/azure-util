@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 // screens
-import { ModelExplorer } from './model-explorer';
+import { ModelExplorer } from './components/model-explorer';
 
 // routes for blog module
 export const ModelExplorerRoutes: Routes = [

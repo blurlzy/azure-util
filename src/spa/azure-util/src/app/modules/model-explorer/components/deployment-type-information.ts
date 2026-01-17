@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 // angular material
 import { MatDialogModule } from '@angular/material/dialog';
-// buttons
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
