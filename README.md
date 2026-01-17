@@ -13,9 +13,9 @@ Azure Util is a full-stack web application that provides an easy-to-use interfac
 The application consists of a .NET Web API backend that handles Azure service integration and an Angular frontend that provides a modern, responsive user interface.
 
 ## Live Sample
-[https://polite-wave-072b12400.4.azurestaticapps.net] (Azure AI Model Explorer) 
-![Available AI Models] (https://stzlblog.blob.core.windows.net/app-images/az_explorer_1.png)
-![RPM / Quota Calculator] (https://stzlblog.blob.core.windows.net/app-images/az_explorer_2.png)
+[https://polite-wave-072b12400.4.azurestaticapps.net](Azure AI Model Explorer) 
+![Available AI Models](https://stzlblog.blob.core.windows.net/app-images/az_explorer_1.png)
+![RPM / Quota Calculator](https://stzlblog.blob.core.windows.net/app-images/az_explorer_2.png)
 
 
 ## Architecture
