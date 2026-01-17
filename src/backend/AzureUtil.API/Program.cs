@@ -19,7 +19,10 @@ builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager()
 // Add services to the container.
 // register azure rest api clients
 builder.Services.ConfigureServices(builder.Configuration);
+// azure app insights
+builder.Services.ConfigureApplicationInsights(builder.Configuration);
 
+// controllers
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 // builder.Services.AddOpenApi();

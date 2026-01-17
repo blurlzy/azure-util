@@ -1,4 +1,4 @@
-﻿using AzureUtil.API.Services;
+﻿using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 using Microsoft.OpenApi;
 
 namespace AzureUtil.API
@@ -43,12 +43,23 @@ namespace AzureUtil.API
           }
 
 
+          // configure application insights
+          public static void ConfigureApplicationInsights(this IServiceCollection services, IConfiguration configuration)
+          {
+               // retreive the connection string from key vault
+               var appInsightsConnection = configuration[SecretKeys.AppInsightsConnString];
+               var options = new ApplicationInsightsServiceOptions { ConnectionString = appInsightsConnection };
+               services.AddApplicationInsightsTelemetry(options: options);
+          }
+
+
           public static void ConfigureCors(this IServiceCollection services, string corsPolicy)
           {
                string[] allowedOrigins = new[]
                {
                     "http://localhost:4200",
-                    "https://polite-wave-072b12400.4.azurestaticapps.net"
+                    "https://polite-wave-072b12400.4.azurestaticapps.net",
+                    "https://azureutil.zongyi.me"
                };
 
                // cors policy

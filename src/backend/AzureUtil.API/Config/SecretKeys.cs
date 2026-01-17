@@ -7,5 +7,8 @@
           public const string SubscriptionId = "ZLSubscriptionId";
           public const string ClientId = "ZLAzureRestClientId";
           public const string ClientSecret = "ZLAzureRestClientSecret";
+
+          // app insights
+          public const string AppInsightsConnString = "ZLAppInsights";
      }
 }

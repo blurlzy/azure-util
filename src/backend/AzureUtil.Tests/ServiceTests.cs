@@ -131,47 +131,5 @@ namespace AzureUtil.Tests
           //     _mockAzureRestClient.Verify(x => x.ListLocationsAsync(It.IsAny<CancellationToken>()), Times.Once);
           //}
 
-          private static IReadOnlyList<Location> CreateTestLocations()
-          {
-               return new List<Location>
-            {
-                new()
-                {
-                    Id = "/subscriptions/test/locations/eastus",
-                    Name = "eastus",
-                    DisplayName = "East US",
-                    RegionalDisplayName = "(US) East US",
-                    Metadata = new LocationMetadata
-                    {
-                        RegionType = "Physical",
-                        //RegionCategory = "Recommended"
-                    }
-                },
-                new()
-                {
-                    Id = "/subscriptions/test/locations/westus",
-                    Name = "westus",
-                    DisplayName = "West US",
-                    RegionalDisplayName = "(US) West US",
-                    Metadata = new LocationMetadata
-                    {
-                        RegionType = "Physical",
-                        //RegionCategory = "Recommended"
-                    }
-                },
-                new()
-                {
-                    Id = "/subscriptions/test/locations/centralus",
-                    Name = "centralus",
-                    DisplayName = "Central US",
-                    RegionalDisplayName = "(US) Central US",
-                    Metadata = new LocationMetadata
-                    {
-                        RegionType = "Physical",
-                        //RegionCategory = "Recommended"
-                    }
-                }
-            };
-          }
      }
 }
