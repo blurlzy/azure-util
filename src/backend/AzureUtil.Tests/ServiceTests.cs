@@ -80,7 +80,8 @@ namespace AzureUtil.Tests
 
           [Theory]
           [InlineData("australiaeast")]
-          [InlineData("southeastasia")]
+          [InlineData("eastus2")]
+          //[InlineData("southeastasia")]
           public async Task Get_Models_By_Location(string location) 
           {
           
@@ -94,7 +95,6 @@ namespace AzureUtil.Tests
                _output.WriteLine($"Total Models in {location}: {models.Count}");
 
                // get unique model formats
-
                var modelFormats = models
                     .Select(m => m.Model.Format)
                     .Distinct()
@@ -105,6 +105,17 @@ namespace AzureUtil.Tests
                foreach(var format in modelFormats)
                {                    
                     _output.WriteLine($"Format: {format}");
+               }
+
+               // get unique model status
+               var modelStatus = models
+                    .Select(m => m.Model.LifecycleStatus)
+                    .Distinct()
+                    .ToList();
+
+               foreach(var status in modelStatus)
+               {
+                    _output.WriteLine($"Status: {status}");
                }
 
           }

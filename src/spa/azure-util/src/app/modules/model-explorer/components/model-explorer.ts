@@ -22,7 +22,7 @@ import { ModelTable } from './model-table';
     <div class="row g-3">
        <div class="col-md-10 pe-4">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-5">
               <mat-form-field  class="full-width" appearance="outline">
                 <mat-label>Azure Region</mat-label>
                 <mat-select [formControl]="selectedLocation">
@@ -33,7 +33,7 @@ import { ModelTable } from './model-table';
               </mat-form-field>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <mat-form-field  class="full-width" appearance="outline">
                 <mat-label>Model Kind</mat-label>
                 <mat-select [formControl]="selectedModelFormat">
@@ -48,7 +48,22 @@ import { ModelTable } from './model-table';
               </mat-form-field>
             </div>
 
-            <app-model-table [data]="models()"></app-model-table> 
+            <div class="col-md-3">
+              <mat-form-field class="full-width" appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select [formControl]="selectedStatus" multiple>
+                  @for(opt of statusOptions; track opt) {
+                    <mat-option [value]="opt">{{opt}}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            
+            <div> 
+              <!-- Model Table -->
+                <app-model-table [data]="availableModels()"></app-model-table> 
+            </div>
+            
           </div>
 
        </div> 
@@ -89,9 +104,15 @@ export class ModelExplorer {
   modelFormats = signal<any[]>([]);
   // models in selected location and format
   models = signal<any[]>([]);
+  // available models  only
+  availableModels = signal<any[]>([]);
+  // satus options
+  statusOptions = ['GenerallyAvailable', 'Stable', 'Preview', 'Deprecated'];
 
+  // form controls
   selectedLocation = new FormControl('');
   selectedModelFormat = new FormControl('');
+  selectedStatus = new FormControl(['GenerallyAvailable', 'Stable', 'Preview']);
 
   // ctor
   constructor() {
@@ -110,13 +131,27 @@ export class ModelExplorer {
     // model format changes
     this.selectedModelFormat.valueChanges.subscribe((modelFormat) => {
       // reste the models
+      this.availableModels.set([]);
       this.models.set([]);  
       if(this.selectedLocation.value && modelFormat) {
           // reload models
           this.loadModels(this.selectedLocation.value, modelFormat);
         }
     });
-
+ 
+    // status changes
+    this.selectedStatus.valueChanges.subscribe((statuses) => {
+      if(statuses && statuses.length === 0) {
+        // display all models
+        this.availableModels.set(this.models());
+        return;
+      }
+      const selectedStatuses = statuses?? [];
+      // filter models by status
+      const allModels = this.models();
+      const filteredModels = allModels.filter((model: any) => selectedStatuses.includes(model.model.lifecycleStatus));
+      this.availableModels.set(filteredModels);
+    });    
   }
 
   ngOnInit(): void {
@@ -138,9 +173,13 @@ export class ModelExplorer {
   private loadModels(location: string, format: string): void {
     this.dataService.getModels(location, format).subscribe((data) => {
       // filter the models by status
-      const availableModels = data.filter((model: any) => model.model.lifecycleStatus !== 'Deprecated');
-      this.models.set(availableModels);
-      console.log(availableModels);
+      const selectedStatuses = this.selectedStatus.value?? [];
+      const availableModels =  data.filter((model: any) => selectedStatuses.includes(model.model.lifecycleStatus));
+      // all models
+      this.models.set(data);
+      // available models filtered by status
+      this.availableModels.set(availableModels);
+      //console.log(data);
     });
   }
 }

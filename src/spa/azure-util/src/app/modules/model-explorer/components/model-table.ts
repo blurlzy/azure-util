@@ -1,17 +1,17 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, inject, computed, signal } from '@angular/core';
 import { DecimalPipe, NgClass } from '@angular/common';
 // angular material
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 // components
-import { DeploymentTypeInformation } from './deployment-type-information';
 import { ModelSkuInformation } from './model-sku-information';
 
 @Component({
   selector: 'app-model-table',
-  imports: [DecimalPipe, MatIconModule, MatButtonModule, MatDialogModule, MatTooltipModule],
+  imports: [DecimalPipe, MatIconModule, MatButtonModule, MatDialogModule, MatTooltipModule, MatPaginatorModule],
   template: `
       <table class="table mt-3">
         <thead>
@@ -38,8 +38,11 @@ import { ModelSkuInformation } from './model-sku-information';
                 </td>
                 <td class="align-middle">
                   @if(item.model.lifecycleStatus === 'Preview') {
-                    <span class="text-danger"><strong>Preview</strong></span>
-                  } @else {
+                    <span class="text-info"><strong>Preview</strong></span>
+                  }@else if (item.model.lifecycleStatus === 'Deprecated') {
+                    <span class="text-danger"><strong>Deprecated</strong></span>
+                  } 
+                  @else {
                     {{ item.model.lifecycleStatus }}
                   } 
 
@@ -62,6 +65,7 @@ import { ModelSkuInformation } from './model-sku-information';
 
         </tbody>
       </table>
+
   `,
   styles: `
     .btn-link {
@@ -92,13 +96,31 @@ export class ModelTable {
   @Input({ required: true }) data: any = [];
   readonly dialog = inject(MatDialog);
 
-  // open deployment type information dialog
-  openDeploymentTypeInformation() {
-    const dialogRef = this.dialog.open(DeploymentTypeInformation, {
-      width: '780px',        // Set specific width
-      maxWidth: '85vw',
-    });
+  // pager
+  // pageEvent: PageEvent | undefined;
+  // pageSize = signal(6);
+  // pageIndex = signal(0);
+  // paginatedData = signal<any[]>([]);
+
+
+  ngOnChanges() {
+    // // filter paged data
+    // const startIndex = this.pageIndex() * this.pageSize();
+    // const endIndex = startIndex + this.pageSize();
+    // this.paginatedData.set(this.data.slice(startIndex, endIndex));
   }
+
+  // // pagination event
+  // handlePageEvent(e: PageEvent) {
+  //   this.pageEvent = e;
+  //   this.pageSize.set(e.pageSize);
+  //   this.pageIndex.set(e.pageIndex);
+
+  //   // filter paged data
+  //   const startIndex = this.pageIndex() * this.pageSize();
+  //   const endIndex = startIndex + this.pageSize();
+  //   this.paginatedData.set(this.data.slice(startIndex, endIndex));
+  // }
 
   // open sku information dialog
   openModelSkuInformation(modelName: string, sku: any) {
@@ -111,22 +133,5 @@ export class ModelTable {
       //restoreFocus: false,     // Prevent focus restoration issues
     });
   }
-
-
-  // getModelCapabilitiesTooltip(item: any): string {
-  //   const capabilities = [];
-  //   if (item.model?.capabilities) {
-  //     if (item.model.capabilities.imageGenerations != '') {
-  //       capabilities.push('✅ Image Generation');
-  //     }
-
-  //     if (item.model.capabilities.inference != '') {
-  //       capabilities.push('✅ Inference');
-  //     }
-  //     const caps = item.model.capabilities;
-  //   }
-  //   return capabilities.join(' ')
-  // }
-
 }
 
