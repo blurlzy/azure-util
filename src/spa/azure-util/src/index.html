@@ -10,8 +10,33 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    .loader {
+      margin: 450px auto 0;
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #ed008c;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 <body>
-  <app-root></app-root>
+    <app-root>
+        <!-- loader will be replaced by anagular components once the initialization is completed -->
+        <div class="loader"></div>
+    </app-root>
 </body>
 </html>

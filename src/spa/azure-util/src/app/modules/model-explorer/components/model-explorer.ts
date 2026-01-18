@@ -5,7 +5,6 @@ import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 // data services
 import { ModelExplorerDataService } from '../model-explorer.data.service';
 // loader
@@ -16,15 +15,10 @@ import { ModelTable } from './model-table';
 @Component({
   selector: 'app-model-explorer',
   imports: [CommonModule, FormsModule, ReactiveFormsModule, 
-          MatInputModule, MatSelectModule, MatFormFieldModule, MatProgressBarModule, ModelTable],
+          MatInputModule, MatSelectModule, MatFormFieldModule,  ModelTable],
   template: `
   <!-- Controls -->   
   <div class="mb-3">  
-    @if(loader.isLoading | async)
-      {
-          <mat-progress-bar mode="indeterminate" class="mb-2"></mat-progress-bar>  
-      }
-    
     <div class="row g-3">
        <div class="col-md-10 pe-4">
           <div class="row">
