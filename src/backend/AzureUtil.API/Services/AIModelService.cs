@@ -25,6 +25,18 @@ namespace AzureUtil.API.Services
                     .ToList();
           }
 
+          public async Task<IReadOnlyList<ModelInformation>> GetModelsByLocationAsync(string location, string modelFormat, CancellationToken ct = default)
+          {
+               var models = await this.GetModelsByLocationAsync(location, ct);
+
+               // filter models by format 
+               // we need also filter the models by kind = "AIService"
+               return models
+                    .Where(m => string.Equals(m.Model.Format, modelFormat, StringComparison.OrdinalIgnoreCase) &&
+                                string.Equals(m.Kind, "AIServices", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+          }
+
           public async Task<IReadOnlyList<ModelInformation>> GetModelsByLocationAsync(string location, CancellationToken ct = default)
           {
                // use location as cache key
@@ -36,18 +48,6 @@ namespace AzureUtil.API.Services
 
                     return await _azureRestClient.ListModelsByLocationAsync(location, ct);
                }) ?? [];
-          }
-
-          public async Task<IReadOnlyList<ModelInformation>> GetModelsByLocationAsync(string location, string modelFormat, CancellationToken ct = default)
-          {
-               var models = await this.GetModelsByLocationAsync(location, ct);
-
-               // filter models by format 
-               // we need also filter the models by kind = "AIService"
-               return models
-                    .Where(m => string.Equals(m.Model.Format, modelFormat, StringComparison.OrdinalIgnoreCase) &&
-                                string.Equals(m.Kind, "AIServices", StringComparison.OrdinalIgnoreCase))
-                    .ToList();
           }
      }
 

@@ -1,22 +1,37 @@
-import { Component, Input, inject, computed, signal } from '@angular/core';
+import { Component, Input, inject, signal } from '@angular/core';
 import { DecimalPipe, NgClass } from '@angular/common';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 // angular material
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+// rxjs
+import { debounceTime } from 'rxjs';
 // components
 import { ModelSkuInformation } from './model-sku-information';
 
+
 @Component({
   selector: 'app-model-table',
-  imports: [DecimalPipe, MatIconModule, MatButtonModule, MatDialogModule, MatTooltipModule, MatPaginatorModule],
+  imports: [ReactiveFormsModule, DecimalPipe, MatIconModule, MatButtonModule, MatDialogModule, MatTooltipModule, MatPaginatorModule],
   template: `
       <table class="table mt-3">
         <thead>
           <tr>
-            <th scope="col" class="align-middle">Model</th>
+            <th scope="col" class="align-middle">
+              <div class="d-flex align-items-center gap-2">
+                <span>Model</span>
+                @if(showFilter()){
+                    <button class="btn btn-link p-0" (click)="toggleFilter()"><i class="bi bi-funnel-fill"></i></button>
+                    <input type="text" class="bottom-line-input" [formControl]="filterText" placeholder="Filter models..." />
+                }@else {
+                    <button class="btn btn-link p-0" (click)="toggleFilter()"><i class="bi bi-funnel"></i></button>
+                }
+         
+              </div>
+            </th>
             <th scope="col" class="align-middle">Version</th>
             <th scope="col" class="align-middle">Status </th>
             <th scope="col" class="align-middle">
@@ -28,7 +43,7 @@ import { ModelSkuInformation } from './model-sku-information';
           </tr>
         </thead>
         <tbody>
-          @for(item of data; track item) {
+          @for(item of filteredData(); track item) {
               <tr>
                 <td class="align-middle"> 
                   {{ item.model.name }}  
@@ -90,11 +105,41 @@ import { ModelSkuInformation } from './model-sku-information';
       opacity: 1;
     }
 
+    /* Bottom line input style */
+    .bottom-line-input {
+      width:160px;
+      border: none;
+      border-bottom: 2px solid #000;
+      border-radius: 0;
+      background: transparent;
+      padding: 4px 0;
+      font-size: 0.875rem;
+      transition: border-bottom-color 0.2s ease-in-out;
+    }
+
+    .bottom-line-input:focus {
+      outline: none;
+      border-bottom-color: #ed008c;
+      box-shadow: none;
+    }
+
+    .bottom-line-input::placeholder {
+      color: #6c757d;
+      opacity: 0.7;
+    }
+
   `,
 })
 export class ModelTable {
   @Input({ required: true }) data: any = [];
   readonly dialog = inject(MatDialog);
+
+  // show filter
+  showFilter = signal(false);
+  // filtered data
+  filteredData = signal<any[]>([]);
+  // filter text
+  filterText = new FormControl('');
 
   // pager
   // pageEvent: PageEvent | undefined;
@@ -102,14 +147,42 @@ export class ModelTable {
   // pageIndex = signal(0);
   // paginatedData = signal<any[]>([]);
 
+  constructor() {
 
-  ngOnChanges() {
-    // // filter paged data
-    // const startIndex = this.pageIndex() * this.pageSize();
-    // const endIndex = startIndex + this.pageSize();
-    // this.paginatedData.set(this.data.slice(startIndex, endIndex));
+    // filter text changes
+    //  ensure it only triggers after user stops typing for 300ms
+    this.filterText.valueChanges
+                  .pipe(debounceTime(200))
+                  .subscribe((text) => {
+                        if (text == null || text.trim() === '') {
+                          //reset
+                          this.filteredData.set(this.data);
+                          return;
+                        }
+
+                        // filter
+                          const filtered = this.data.filter((item: any) => item.model.name.toLowerCase().includes(text.toLowerCase()));
+                          this.filteredData.set(filtered);
+    });
   }
 
+
+  ngOnChanges() {
+    // initialize filtered data
+    this.filteredData.set(this.data);
+    // reset the filter text
+    this.filterText.setValue('');
+  }
+
+  toggleFilter() {
+    this.showFilter.set(!this.showFilter());
+
+    // reset the filter when it is hidden
+    if (!this.showFilter()) {
+      this.filterText.setValue('');
+      this.filteredData.set(this.data);
+    }
+  }
   // // pagination event
   // handlePageEvent(e: PageEvent) {
   //   this.pageEvent = e;

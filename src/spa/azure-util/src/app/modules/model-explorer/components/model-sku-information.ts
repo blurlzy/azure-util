@@ -119,6 +119,8 @@ export class ModelSkuInformation {
   calculateRPM(): void {
     const tpm = this.tpmFormControl.value || 0;
     const avgTokens = this.avgTokensFormControl.value || 1;
-    this.rpm.set(tpm / avgTokens);
+    // round the value
+    this.rpm.set(Math.round(tpm / avgTokens));
+    //this.rpm.set(tpm / avgTokens);
   }
 }

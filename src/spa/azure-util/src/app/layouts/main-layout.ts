@@ -32,8 +32,8 @@ import { Loader } from '../core/services/loader.service';
 
         <footer class="mt-2 text-muted small text-center">
           <div>
-            built with love <i class="bi bi-heart-fill text-danger"></i> | 
-            <a href="https://github.com/blurlzy/azure-util" target="_blank" class="text-decoration-none text-dark">
+            built with love <i class="bi bi-heart-fill text-danger me-2"></i> | 
+            <a href="https://github.com/blurlzy/azure-util" target="_blank" class="text-decoration-none text-dark ms-2">
               <i class="bi bi-github"></i> view on GitHub
             </a>
           </div>
