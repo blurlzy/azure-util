@@ -23,7 +23,7 @@ import { ModelTable } from './model-table';
        <div class="col-md-10 pe-4">
           <div class="row">
             <div class="col-md-5">
-              <mat-form-field  class="full-width" appearance="outline">
+              <mat-form-field  class="full-width">
                 <mat-label>Azure Region</mat-label>
                 <mat-select [formControl]="selectedLocation">
                   @for (location of locations(); track location) {
@@ -34,7 +34,7 @@ import { ModelTable } from './model-table';
             </div>
 
             <div class="col-md-4">
-              <mat-form-field  class="full-width" appearance="outline">
+              <mat-form-field  class="full-width">
                 <mat-label>Model Kind</mat-label>
                 <mat-select [formControl]="selectedModelFormat">
                   @if(modelFormats().length === 0 && selectedLocation.value !== '') {
@@ -49,7 +49,7 @@ import { ModelTable } from './model-table';
             </div>
 
             <div class="col-md-3">
-              <mat-form-field class="full-width" appearance="outline">
+              <mat-form-field class="full-width">
                 <mat-label>Status</mat-label>
                 <mat-select [formControl]="selectedStatus" multiple>
                   @for(opt of statusOptions; track opt) {

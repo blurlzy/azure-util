@@ -17,7 +17,7 @@ import { Loader } from '../core/services/loader.service';
       <div class="container py-4">
         <!-- Header -->
         <header class="mb-4">
-          <h1 class="h4 mb-1"> <img src="./assets/images/azure-logo.png" alt="Azure Logo" class="logo"> Azure AI Region → Model Explorer</h1>
+          <h1 class="h4 mb-1"> <img src="./assets/images/10018-icon-service-Azure-A.svg" alt="Azure Logo" class="logo"> Azure AI Region → Model Explorer</h1>
           <div class="text-muted small">
             Select an Azure region and explore available AI models, deployment types, and quotas.
           </div>

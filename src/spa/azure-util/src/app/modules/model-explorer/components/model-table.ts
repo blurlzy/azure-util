@@ -83,6 +83,16 @@ import { ModelSkuInformation } from './model-sku-information';
 
   `,
   styles: `
+    /* Table transparent background */
+    .table {
+      background-color: transparent !important;
+    }
+    
+    .table th,
+    .table td {
+      background-color: transparent !important;
+    }
+
     .btn-link {
       color:black;
       text-decoration: none !important;
