@@ -45,7 +45,7 @@ import { ModelSkuInformation } from './model-sku-information';
 
                 </td>
                 <td class="align-middle"> 
-                  <ul >
+                  <ul class="mb-0 list-unstyled">
                     @for(sku of item.model.skus; track sku) {
                       <li>
                         <button type="button" class="btn btn-link hover-icon-btn" (click)="openModelSkuInformation(item.model.name, sku)">

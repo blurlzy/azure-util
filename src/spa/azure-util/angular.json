@@ -25,6 +25,8 @@
             "assets": [
               "src/staticwebapp.config.json",
               "src/assets",
+              "src/robots.txt",
+              "src/ads.txt",
               {
                 "glob": "**/*",
                 "input": "public"
