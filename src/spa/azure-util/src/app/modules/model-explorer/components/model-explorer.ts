@@ -18,8 +18,7 @@ import { ModelTable } from './model-table';
           MatInputModule, MatSelectModule, MatFormFieldModule,  ModelTable],
   template: `
   <!-- Controls -->   
-  <div class="mb-3">  
-    <div class="row g-3">
+    <div class="row g-3 mt-3">
        <div class="col-md-10 pe-4">
           <div class="row">
             <div class="col-md-5">
@@ -81,8 +80,6 @@ import { ModelTable } from './model-table';
 
     </div>
 
-
-  </div>
   `,
   styles: `
     .right-nav {

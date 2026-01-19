@@ -53,7 +53,10 @@ import { ModelSkuInformation } from './model-sku-information';
                 </td>
                 <td class="align-middle">
                   @if(item.model.lifecycleStatus === 'Preview') {
-                    <span class="text-info"><strong>Preview</strong></span>
+                    <span class="text-warning" 
+                          matTooltip="We don't recommend using preview models in production. We'll upgrade all deployments of preview models to either future preview versions or to the latest stable, generally available version.">
+                          <strong>Preview <i class="bi bi-info-circle"></i></strong>
+                    </span>
                   }@else if (item.model.lifecycleStatus === 'Deprecated') {
                     <span class="text-danger"><strong>Deprecated</strong></span>
                   } 
@@ -80,7 +83,6 @@ import { ModelSkuInformation } from './model-sku-information';
 
         </tbody>
       </table>
-
   `,
   styles: `
     /* Table transparent background */

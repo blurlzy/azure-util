@@ -110,8 +110,6 @@ export class ModelSkuInformation {
   rpm = signal<number | null>(null);
 
   ngOnInit() {
-    // You can use this.data.sku to access the SKU data passed to the dialog
-    console.log('SKU Data:', this.data);
     // set tpm
     this.tpmFormControl.setValue(this.data.sku.capacity.maximum);
   }

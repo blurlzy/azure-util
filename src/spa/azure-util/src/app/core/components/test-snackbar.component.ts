@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SnackbarService } from './core/services/snackbar.service';
+import { SnackbarService } from '../services/snackbar.service';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
