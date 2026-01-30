@@ -46,7 +46,7 @@ namespace AzureUtil.Tests
 
                var mockHttpClient = new HttpClient();
 
-               _azureRestClient = new AzureRestClient(mockOptions.Object, mockHttpClient);
+               _azureRestClient = new AzureRestClient(mockOptions.Object, mockHttpClient, _memoryCache);
                _sut = new LocationService(_azureRestClient, _memoryCache);
 
                _output = output;

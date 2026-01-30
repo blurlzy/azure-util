@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text.Json;
@@ -12,11 +13,14 @@ namespace AzureUtil.API.Services
           private readonly HttpClient _httpClient;
           private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
+          private const string TokenCacheKey = "AzureAccessToken";
+          private readonly IMemoryCache _cache;
           // ctor
-          public AzureRestClient(IOptions<AzureOptions> opts, HttpClient httpClient)
+          public AzureRestClient(IOptions<AzureOptions> opts, HttpClient httpClient, IMemoryCache cache)
           {
                _opts = opts.Value;
                _httpClient = httpClient;
+               _cache = cache;
           }
 
           public async Task<IReadOnlyList<Location>> ListLocationsAsync(CancellationToken ct = default)
@@ -88,11 +92,28 @@ namespace AzureUtil.API.Services
           }
 
 
+          //private async Task<AccessToken> GetAccessToken(CancellationToken ct = default)
+          //{
+          //     // Get access token - client credentials flow
+          //     var credential = new ClientSecretCredential(_opts.TenantId, _opts.ClientId, _opts.ClientSecret);
+          //     return await credential.GetTokenAsync(new TokenRequestContext(Scopes), ct);
+          //}
+
           private async Task<AccessToken> GetAccessToken(CancellationToken ct = default)
           {
-               // Get access token - client credentials flow
-               var credential = new ClientSecretCredential(_opts.TenantId, _opts.ClientId, _opts.ClientSecret);
-               return await credential.GetTokenAsync(new TokenRequestContext(Scopes), ct);
+               return await _cache.GetOrCreateAsync(TokenCacheKey, async entry =>
+               {
+                    // cache for 30 minutes
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                    entry.SetPriority(CacheItemPriority.High);
+
+                    // Get fresh token - client credentials flow
+                    var credential = new ClientSecretCredential(_opts.TenantId, _opts.ClientId, _opts.ClientSecret);
+                    var token = await credential.GetTokenAsync(new TokenRequestContext(Scopes), ct);
+
+                    return token;
+               });
           }
+
      }
 }
