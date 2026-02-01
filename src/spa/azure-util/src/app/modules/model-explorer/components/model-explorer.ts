@@ -11,11 +11,12 @@ import { ModelExplorerDataService } from '../model-explorer.data.service';
 import { Loader } from '../../../core/services/loader.service';
 // components
 import { ModelTable } from './model-table';
+import { GoogleAds } from '../../../core/components/google-ads';
 
 @Component({
   selector: 'app-model-explorer',
   imports: [CommonModule, FormsModule, ReactiveFormsModule, 
-          MatInputModule, MatSelectModule, MatFormFieldModule,  ModelTable],
+          MatInputModule, MatSelectModule, MatFormFieldModule,  ModelTable, GoogleAds],
   template: `
   <!-- Controls -->   
     <div class="row g-3 mt-3">
@@ -76,8 +77,12 @@ import { ModelTable } from './model-table';
             <a class="nav-link" href="https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/deployment-types?view=foundry-classic" target="_blank">Deployment types for Microsoft Foundry Models</a>
             <a class="nav-link" href="https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/aoai/" target="_blank">Azure AI Foundry Models pricing</a>
           </nav>
-       </div> 
 
+          <!-- google ads -->
+          <div class="ads">
+              <app-google-ads></app-google-ads>
+            </div>
+       </div>        
     </div>
 
   `,
@@ -88,6 +93,12 @@ import { ModelTable } from './model-table';
 
     .right-nav .nav-link { color: #111; padding-left: 2; text-decoration: underline; }
     .right-nav .nav-link:hover { text-decoration: none; }
+
+    .ads {
+      margin-top: 2rem;
+      border-top: 2px dashed #000;
+      padding-top: 1rem;
+    }
   `,
 })
 export class ModelExplorer {

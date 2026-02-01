@@ -35,6 +35,9 @@ import { Loader } from '../core/services/loader.service';
             built with love <i class="bi bi-heart-fill text-danger me-2"></i> | 
             <a href="https://github.com/blurlzy/azure-util" target="_blank" class="text-decoration-none text-dark ms-2">
               <i class="bi bi-github"></i> view on GitHub
+            </a> | 
+            <a href="https://zongyi.me/about" target="_blank" class="text-decoration-none text-dark ms-2">
+              🌀 about the author
             </a>
           </div>
         </footer>
