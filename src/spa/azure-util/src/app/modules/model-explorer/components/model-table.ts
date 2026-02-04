@@ -5,6 +5,8 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 // rxjs
@@ -15,7 +17,8 @@ import { ModelSkuInformation } from './model-sku-information';
 
 @Component({
   selector: 'app-model-table',
-  imports: [ReactiveFormsModule, DecimalPipe, MatIconModule, MatButtonModule, MatDialogModule, MatTooltipModule, MatPaginatorModule],
+  imports: [ReactiveFormsModule, DecimalPipe,
+    MatIconModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatSelectModule, MatTooltipModule, MatPaginatorModule],
   template: `
       <table class="table mt-3">
         <thead>
@@ -23,22 +26,26 @@ import { ModelSkuInformation } from './model-sku-information';
             <th scope="col" class="align-middle">
               <div class="d-flex align-items-center gap-2">
                 <span>Model</span>
-                @if(showFilter()){
+                <!-- @if(showFilter()){
                     <button class="btn btn-link p-0" (click)="toggleFilter()"><i class="bi bi-funnel-fill"></i></button>
                     <input type="text" class="bottom-line-input" [formControl]="filterText" placeholder="Filter models..." />
                 }@else {
                     <button class="btn btn-link p-0" (click)="toggleFilter()"><i class="bi bi-funnel"></i></button>
-                }
+                } -->
          
               </div>
             </th>
             <th scope="col" class="align-middle">Version</th>
             <th scope="col" class="align-middle">Status </th>
             <th scope="col" class="align-middle">
-              Deployment Type 
-              <a href="https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-models/concepts/deployment-types?view=foundry-classic" class="text-dark" target="_blank">
-                <i class="bi bi-box-arrow-up-right ms-1"></i>
-              </a>   
+                <select class="form-select" [formControl]="selectedDeploymentType">
+                  <option value="">--- All Deployment Types ---</option>
+                    @for(deployment of deploymentTypes; track deployment) {
+                      <mat-option [value]="deployment.value">{{deployment.name}}</mat-option>
+                      <option [value]="deployment.value">{{deployment.name}}</option>
+                    }
+                  
+                </select>
               </th>
           </tr>
         </thead>
@@ -152,7 +159,21 @@ export class ModelTable {
   filteredData = signal<any[]>([]);
   // filter text
   filterText = new FormControl('');
+  // filter deployment types
+  selectedDeploymentType = new FormControl('');
 
+  // deployment types
+  deploymentTypes = [
+    { name: 'Global Standard', value: 'GlobalStandard' },
+    { name: 'Global Provisioned', value: 'GlobalProvisionedManaged' },
+    { name: 'Global Batch', value: 'GlobalBatch' },
+    { name: 'Data Zone Standard', value: 'DataZoneStandard' },
+    { name: 'Data Zone Provisioned', value: 'DataZoneProvisionedManaged' },
+    { name: 'Data Zone Batch', value: 'DataZoneBatch' },
+    { name: 'Standard', value: 'Standard' },
+    { name: 'Regional Provisioned', value: 'ProvisionedManaged' },
+    { name: 'Developer', value: 'Developer' },
+  ];
   // pager
   // pageEvent: PageEvent | undefined;
   // pageSize = signal(6);
@@ -160,21 +181,37 @@ export class ModelTable {
   // paginatedData = signal<any[]>([]);
 
   constructor() {
-
     // filter text changes
-    //  ensure it only triggers after user stops typing for 300ms
+    // ensure it only triggers after user stops typing for 300ms
     this.filterText.valueChanges
-                  .pipe(debounceTime(200))
-                  .subscribe((text) => {
-                        if (text == null || text.trim() === '') {
-                          //reset
-                          this.filteredData.set(this.data);
-                          return;
-                        }
+      .pipe(debounceTime(200))
+      .subscribe((text) => {
+        if (text == null || text.trim() === '') {
+          //reset
+          this.filteredData.set(this.data);
+          return;
+        }
 
-                        // filter
-                          const filtered = this.data.filter((item: any) => item.model.name.toLowerCase().includes(text.toLowerCase()));
-                          this.filteredData.set(filtered);
+        // filter
+        const filtered = this.data.filter((item: any) => item.model.name.toLowerCase().includes(text.toLowerCase()));
+        this.filteredData.set(filtered);
+      });
+
+    // deployment type changes
+    this.selectedDeploymentType.valueChanges.subscribe((deploymentType) => {
+      console.log(this.data);
+      if (deploymentType == null || deploymentType === '') {
+        // reset the data
+        this.filteredData.set(this.data);
+      }
+      else {
+        // filter by deployment type
+        const filtered = this.data.filter((item: any) => {
+          return item.model.skus.some((sku: any) => sku.name === deploymentType);
+        });
+        this.filteredData.set(filtered);
+      }
+
     });
   }
 
@@ -184,6 +221,7 @@ export class ModelTable {
     this.filteredData.set(this.data);
     // reset the filter text
     this.filterText.setValue('');
+    this.selectedDeploymentType.setValue('');
   }
 
   toggleFilter() {
