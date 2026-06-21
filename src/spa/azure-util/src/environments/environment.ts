@@ -1,4 +1,4 @@
 export const environment = {
 	production: true,
-	apiEndpoint: 'https://app-azutil-api-heh3hterfedsbbg3.australiaeast-01.azurewebsites.net/', 
+	apiEndpoint: 'https://aca-azutil.calmglacier-d525e52c.australiaeast.azurecontainerapps.io/', 
  };
